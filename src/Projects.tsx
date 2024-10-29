@@ -7,9 +7,10 @@ import {
   Typography,
 } from "@mui/material";
 
-import customer from "./assets/customer.jpg";
-import evogym from "./assets/evogym.png";
-import notes from "./assets/Notes.png";
+import customer from "./assets/images/customer_segmentation .png";
+import evogym from "./assets//images/evogym.png";
+import notes from "./assets/images/Notes.png";
+
 const Projects = () => {
   return (
     <div id="projects">

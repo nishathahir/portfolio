@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import { Box, Button, Typography } from "@mui/material";
 
 import React from "react";
-import illustration from "./assets/development-illustration.png";
+import illustration from "./assets/images/development-illustration.png";
 import { motion } from "framer-motion";
 
 const Home: React.FC = () => {
@@ -11,9 +11,9 @@ const Home: React.FC = () => {
     <motion.div
       id="home"
       className="row"
-      initial={{ opacity: 0, y: 20 }} // Starting state
-      animate={{ opacity: 1, y: 0 }} // Ending state
-      transition={{ duration: 0.6 }} // Animation duration
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
       style={{
         marginRight: 0,
         paddingTop: "2rem",
