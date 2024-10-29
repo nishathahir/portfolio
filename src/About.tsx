@@ -1,6 +1,6 @@
 import { Button, Typography } from "@mui/material";
 
-import aboutImage from "./assets/about.jpg";
+import aboutImage from "../src/assets/about.jpg";
 
 const About = () => {
   return (
