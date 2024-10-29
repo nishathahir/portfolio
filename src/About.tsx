@@ -1,5 +1,7 @@
 import { Button, Typography } from "@mui/material";
 
+import aboutImage from "./assets/about.jpg";
+
 const About = () => {
   return (
     <div id="about">
@@ -56,7 +58,7 @@ const About = () => {
         </div>
         <div className="col-6 text-center">
           <img
-            src="/src/assets/about.JPG"
+            src={aboutImage}
             style={{
               width: "270px",
               border: "2px solid #FDC435",

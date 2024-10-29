@@ -1,6 +1,6 @@
-import { Button, TextField, Typography } from "@mui/material";
+import { Alert, Button, Snackbar, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-import emailjs, { EmailJSResponseStatus } from "emailjs-com"; // Import EmailJS
+import emailjs, { EmailJSResponseStatus } from "emailjs-com";
 
 import EmailIcon from "@mui/icons-material/Email";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
@@ -9,9 +9,36 @@ const Contact = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success"
+  );
+  const [isSending, setIsSending] = useState(false);
+
+  const validateEmail = (email: string) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
 
   const sendEmail = (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent the default form submission
+    e.preventDefault();
+
+    if (!name || !email || !message) {
+      setSnackbarMessage("Please fill in all required fields.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setSnackbarMessage("Please enter a valid email address.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+
+    setIsSending(true); // Set sending state
 
     const templateParams = {
       from_name: name,
@@ -35,17 +62,27 @@ const Contact = () => {
             response.status,
             response.text
           );
-          // Optionally, you can reset the form or display a success message
+          setSnackbarMessage("Email sent successfully!");
+          setSnackbarSeverity("success");
+          setSnackbarOpen(true);
+          setName("");
+          setEmail("");
+          setMessage("");
         },
         (err) => {
           console.error("Failed to send email. Error: ", err);
+          setSnackbarMessage("Failed to send email. Please try again.");
+          setSnackbarSeverity("error");
+          setSnackbarOpen(true);
         }
-      );
+      )
+      .finally(() => {
+        setIsSending(false); // Reset sending state
+      });
+  };
 
-    // Clear the form fields after sending
-    setName("");
-    setEmail("");
-    setMessage("");
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -69,12 +106,19 @@ const Contact = () => {
               <TextField
                 fullWidth
                 label="Name"
+                required
                 value={name}
-                onChange={(e) => setName(e.target.value)} // Update name state
+                onChange={(e) => setName(e.target.value)}
                 sx={{
                   marginBottom: "1rem",
                   width: "60%",
                   background: "white",
+                  "& .MuiOutlinedInput-root.Mui-focused": {
+                    backgroundColor: "white", // Set your desired light gray color
+                    "& fieldset": {
+                      border: "1px solid #e6eaff",
+                    },
+                  },
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": {
                       border: "1px solid #e6eaff",
@@ -87,12 +131,23 @@ const Contact = () => {
               <TextField
                 fullWidth
                 label="Email"
+                required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)} // Update email state
+                onChange={(e) => setEmail(e.target.value)}
+                error={!!(email && !validateEmail(email))} // Ensures a boolean
+                helperText={
+                  email && !validateEmail(email) ? "Invalid email format." : ""
+                }
                 sx={{
                   marginBottom: "1rem",
                   width: "60%",
                   background: "white",
+                  "& .MuiOutlinedInput-root.Mui-focused": {
+                    backgroundColor: "white", // Set your desired light gray color
+                    "& fieldset": {
+                      border: "1px solid #e6eaff",
+                    },
+                  },
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": {
                       border: "1px solid #e6eaff",
@@ -105,11 +160,12 @@ const Contact = () => {
               <TextField
                 fullWidth
                 label="Message"
+                required
                 variant="outlined"
                 multiline
                 rows={4}
                 value={message}
-                onChange={(e) => setMessage(e.target.value)} // Update message state
+                onChange={(e) => setMessage(e.target.value)}
                 sx={{
                   marginBottom: "1rem",
                   width: "60%",
@@ -124,20 +180,31 @@ const Contact = () => {
             </div>
             <div className="row justify-content-center">
               <Button
-                type="submit" // Change to submit
+                type="submit"
                 variant="contained"
+                disabled={
+                  !name ||
+                  !email ||
+                  !message ||
+                  !validateEmail(email) ||
+                  isSending
+                }
                 sx={{
-                  backgroundColor: "#fdc435",
-                  color: "black",
+                  backgroundColor: isSending ? "#d3d3d3" : "#fdc435",
+                  color: isSending ? "#000" : "black",
                   textTransform: "none",
                   marginBottom: "1rem",
                   boxShadow: "none",
                   width: "100px",
                   fontSize: "14px",
                   fontWeight: "500",
+                  "&.Mui-disabled": {
+                    backgroundColor: "#d3d3d3",
+                    color: "#7a7a7a",
+                  },
                 }}
               >
-                Send
+                {isSending ? "Sending..." : "Send"}
               </Button>
             </div>
             <div className="row mb-5">
@@ -161,6 +228,22 @@ const Contact = () => {
           </form>
         </div>
       </div>
+
+      {/* Snackbar for feedback */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

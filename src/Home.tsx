@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import { Box, Button, Typography } from "@mui/material";
 
 import React from "react";
+import illustration from "./assets/development-illustration.png";
 import { motion } from "framer-motion";
 
 const Home: React.FC = () => {
@@ -117,7 +118,7 @@ const Home: React.FC = () => {
       <div className="col-lg-4 mt-5">
         <Box
           component="img"
-          src="/src/assets/development-illustration.png"
+          src={illustration}
           alt="Developer illustration"
           sx={{
             width: "100%",

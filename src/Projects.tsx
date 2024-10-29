@@ -7,6 +7,9 @@ import {
   Typography,
 } from "@mui/material";
 
+import customer from "./assets/customer.jpg";
+import evogym from "./assets/evogym.png";
+import notes from "./assets/Notes.png";
 const Projects = () => {
   return (
     <div id="projects">
@@ -108,7 +111,7 @@ const Projects = () => {
               >
                 <Box
                   component="img"
-                  src="/src/assets/evogym.png" // Replace with your image URL
+                  src={evogym}
                   alt="EvoGym"
                   sx={{
                     height: "300px",
@@ -152,7 +155,7 @@ const Projects = () => {
               >
                 <Box
                   component="img"
-                  src="/src/assets/Notes.png" // Replace with your image URL
+                  src={notes}
                   alt="EvoGym"
                   sx={{
                     height: "300px",
@@ -312,7 +315,7 @@ const Projects = () => {
               >
                 <Box
                   component="img"
-                  src="/src/assets/customer.jpg" // Replace with your image URL
+                  src={customer}
                   alt="EvoGym"
                   sx={{
                     height: "300px",
